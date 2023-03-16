@@ -136,7 +136,7 @@ class AddressBook(UserDict):
 
         for v in self.data.keys():
             print(
-                f"Name: {self.data[v].name}, phone: {self.data[v].phone}, birthday {self.data[v].bday}")
+                f"Name: {self.data[v].name}, phone: {self.data[v].phone}, birthday: {self.data[v].bday}")
 
     def iterator(self, num: int = 2):
         while self.current_index < len(self.data):
@@ -155,28 +155,28 @@ class AddressBook(UserDict):
                 print(self.data[value])
         else:
             print("Nothing to show")
-             
 
-    @classmethod
     def read_file(self):
-        with open("ab.txt", "rb") as file:
-            ab = pickle.load(file)
-        return ab
+        with open("ab.bin", "rb") as file:
+            self.data = pickle.load(file)
 
 
     def write_file(self):
-        with open("ab.txt", "wb") as file:
-            pickle.dump(self, file)
+        with open("ab.bin", "wb") as file:
+            print(self.data)
+            pickle.dump(self.data, file)
+
 
 def main():
     print("Hello. This is Address Book v 0.1.1")
     print("""Enter 'a' to add a contact, 's' to show all contacts, 'dr' to delete a contact, 'cp' to change phone, 'df' to delete phone, 'dtb' for days to birthday, 'ad' add birthday and 'q' to quit""")
-    ab.write_file()
+
     ab.read_file()
     while True:
-        
+
         choice = input("Enter your choice\n>>>")
         if choice == 'q':
+            ab.write_file()
             break
         elif (choice == 'a'):
             name = Name(input("Enter contact name\n"))
@@ -212,7 +212,7 @@ def main():
             bday = Birthday(input("Enter contact birthday (mm/dd/yyy)\n"))
             Record.add_birthday(name, bday)
         elif (choice == 'f'):
-            to_find =input("Enter contact name:\n")
+            to_find = input("Enter contact name:\n")
             ab.find_s(to_find)
         elif (choice == '?'):
             print("""Enter 'a' to add a contact, 's' to show all contacts, 'dr' to delete a contact, 'cp' to change phone, 'df' to delete phone, 'dtb' for days to birthday, 'ad' add birthday and 'q' to quit""")
@@ -226,3 +226,24 @@ if __name__ == "__main__":
 
 
 
+# class TestAddressBook(unittest.TestCase):
+#     def setUp(self):
+#         self.address_book = AddressBook()
+#         self.address_book.add_record(
+#             Record("John", "+380556745345", datetime.datetime(1999, 10, 11)))
+#         self.address_book.add_record(
+#             Record("Jane", "+380568890765", datetime.datetime(2001, 5, 30)))
+
+#     def test_search_by_name(self):
+#         results = self.address_book.seek_contact("John")
+#         self.assertEqual(len(results), 1)
+#         self.assertEqual(results[0]['name'], "John")
+
+#     def test_search_by_phone_number(self):
+#         results = self.address_book.seek_contact("055")
+#         self.assertEqual(len(results), 1)
+#         self.assertEqual(results[0]['phones'], "+380556745345")
+
+
+# if __name__ == '__main__':
+#     unittest.main()
